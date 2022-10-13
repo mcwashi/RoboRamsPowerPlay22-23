@@ -40,9 +40,9 @@ public class ChassisTestAuto extends LinearOpMode {
         waitForStart();
         runtime.reset();
         //code goes here
-        encoderDrive(robot.DRIVE_SPEED, 12.0, 12.0,12.0, 12.0, 5);
+        encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
         sleep(1000);
-        encoderDrive(robot.TURN_SPEED, 24, -24, -24, 24, 7);
+        encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
         sleep(1000);
      
 
