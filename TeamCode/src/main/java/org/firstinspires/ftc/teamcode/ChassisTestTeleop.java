@@ -1,26 +1,38 @@
-package org.firstinspires.ftc.teamcode.Team8648;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
+import org.firstinspires.ftc.teamcode.OLDCODE.Frenzy8648HardwarePushbot;
 
-
-@TeleOp(name="8648 RAMMY Teleop", group="Pushbot")
+@TeleOp(name="Chassis Test Teleop", group="Pushbot")
 @Disabled
-public class Power8648Teleop extends LinearOpMode {
-    Power8648HardwarePushbot robot           = new Power8648HardwarePushbot();
+public class ChassisTestTeleop extends LinearOpMode {
+    ChassisTestHardwarePushbot robot           = new ChassisTestHardwarePushbot();
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, true);
         telemetry.addData("Say", "Hello Driver");
         telemetry.update();
-
         waitForStart();
         if (isStopRequested()) return;
         while (opModeIsActive()) {
+           /* double leftPower;
+            double rightPower;
+            double drive = -gamepad1.left_stick_y;
+            double turn  =  gamepad1.right_stick_x;
+            double slide = gamepad2.right_stick_y;
+            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
+            robot.leftFront.setPower(leftPower);
+            robot.rightFront.setPower(rightPower);
+            robot.leftBack.setPower(leftPower);
+            robot.rightBack.setPower(rightPower);
+
+            robot.slideMotor.setPower(slide);
+            */
             double y = -gamepad1.left_stick_y; // Remember, this is reversed!
             double x = gamepad1.left_stick_x;
             double rx = gamepad1.right_stick_x;
@@ -50,48 +62,30 @@ public class Power8648Teleop extends LinearOpMode {
             robot.leftBack.setPower(lb);
             robot.rightBack.setPower(rb);
 
-            robot.leftLinear.setPower(-gamepad2.right_stick_y);
-            robot.rightLinear.setPower(-gamepad2.right_stick_y);
-
-            if(gamepad2.dpad_up)
-                robot.rightLinear.setTargetPosition(1);
-                robot.leftLinear.setTargetPosition(-1);
-
-
-            if(gamepad1.dpad_up){
+            if (gamepad1.dpad_up) {
                 robot.leftFront.setPower(0.5);
                 robot.rightFront.setPower(0.5);
                 robot.leftBack.setPower(0.5);
                 robot.rightBack.setPower(0.5);
             }
-            if(gamepad1.dpad_down){
+            if (gamepad1.dpad_down) {
                 robot.leftFront.setPower(-0.5);
                 robot.rightFront.setPower(-0.5);
                 robot.leftBack.setPower(-0.5);
                 robot.rightBack.setPower(-0.5);
             }
-            if(gamepad1.dpad_left){
+            if (gamepad1.dpad_left) {
                 robot.leftFront.setPower(-0.5);
                 robot.rightFront.setPower(0.5);
                 robot.leftBack.setPower(-0.5);
                 robot.rightBack.setPower(0.5);
             }
-            if(gamepad1.dpad_right){
+            if (gamepad1.dpad_right) {
                 robot.leftFront.setPower(0.5);
                 robot.rightFront.setPower(-0.5);
                 robot.leftBack.setPower(0.5);
                 robot.rightBack.setPower(-0.5);
             }
-            if(gamepad2.a){
-                robot.leftClaw.setPosition(1);
-                robot.rightClaw.setPosition(1);
-            }
-            if(gamepad2.b){
-                robot.leftClaw.setPosition(0);
-                robot.rightClaw.setPosition(0);
-
-            }
-
         }
     }
 }
