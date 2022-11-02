@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.OpenCV;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -15,6 +16,7 @@ public class SleeveDetection extends OpenCvPipeline {
     MAGENTA = Parking Right
      */
 
+    Telemetry telemetry;
     public enum ParkingPosition {
         LEFT,
         CENTER,
@@ -30,12 +32,12 @@ public class SleeveDetection extends OpenCvPipeline {
 
     // Lower and upper boundaries for colors
     private static final Scalar
-            lower_yellow_bounds  = new Scalar(200, 200, 0, 255),
-            upper_yellow_bounds  = new Scalar(255, 255, 130, 255),
-            lower_cyan_bounds    = new Scalar(0, 200, 200, 255),
-            upper_cyan_bounds    = new Scalar(150, 255, 255, 255),
-            lower_magenta_bounds = new Scalar(170, 0, 170, 255),
-            upper_magenta_bounds = new Scalar(255, 60, 255, 255);
+            lower_yellow_bounds  = new Scalar(200, 200, 0),
+            upper_yellow_bounds  = new Scalar(255, 255, 130),
+            lower_cyan_bounds    = new Scalar(0, 200, 200),
+            upper_cyan_bounds    = new Scalar(150, 255, 255),
+            lower_magenta_bounds = new Scalar(170, 0, 170),
+            upper_magenta_bounds = new Scalar(255, 60, 255);
 
     // Color definitions
     private final Scalar
@@ -63,7 +65,22 @@ public class SleeveDetection extends OpenCvPipeline {
         // Noise reduction
         Imgproc.blur(input, blurredMat, new Size(5, 5));
         blurredMat = blurredMat.submat(new Rect(sleeve_pointA, sleeve_pointB));
-        
+
+        Imgproc.cvtColor(input, yelMat, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(input, cyaMat, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(input, magMat, Imgproc.COLOR_RGB2HSV);// converting RGB to HSV color scheme
+        // Normal HSV has HUE values from 0 to 360. Open CV uses 0 to 180,
+        // Normal HSV has Saturation and Value from 0 to 100. Open CV scales that 100 from 0 to 255
+        // HUE's for reference
+        // Red 0
+        // Orange   25 deg or 12.5 in Open VC
+        // Yellow   60 or 30 in Open CV
+        // Green    120 or 60 in open CV
+        // Cyan     180 or 90 in Open CV
+        // Blue     240 or 120 in Open CV
+        // Purple   280 or 140 in Open CV
+        // Pink     300 or 150 in open CV
+        // Red      360 or 180 in openCV
         // Apply Morphology
         kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
         Imgproc.morphologyEx(blurredMat, blurredMat, Imgproc.MORPH_CLOSE, kernel);
@@ -126,4 +143,5 @@ public class SleeveDetection extends OpenCvPipeline {
     public ParkingPosition getPosition() {
         return position;
     }
+
 }

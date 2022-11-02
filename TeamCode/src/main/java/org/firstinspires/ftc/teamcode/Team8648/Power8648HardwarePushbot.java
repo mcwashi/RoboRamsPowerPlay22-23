@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Team8648;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,28 +13,105 @@ public class Power8648HardwarePushbot {
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
 
-
     public DcMotor leftLinear = null;
     public DcMotor rightLinear = null;
 
     public Servo leftClaw = null;
     public Servo rightClaw = null;
 
+
+
     public static final double     COUNTS_PER_MOTOR_REV    = 312 ;    // eg: TETRIX Motor Encoder
     public static final double     DRIVE_GEAR_REDUCTION    = 1.0;     // This is < 1.0 if geared UP
     public static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    public static final double     LINEAR_DIAMETER_INCHES  = 1.5 ;     // For figuring circumference
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
+    public static final double     COUNTS_PER_LINEAR_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (LINEAR_DIAMETER_INCHES * 3.1415);
     public static final double     DRIVE_SPEED             = 0.7;
     public static final double     TURN_SPEED              = 0.6;
+    public static final double     LINEAR_SPEED              = 0.6;
+
+    public  static double            SLIDELIFTSPEED                  = 1.0; //
+    public static  double            SLIDELOWERSPEED                 = -0.4; // use the LOAD instead of down. Zero pushes wheels off the mat
+    public static final double      SLIDE_LEVEL_1                   = -1; // inches
+    public static final double      SLIDE_LEVEL_2                   = -13; // inches
+    public static final double      SLIDE_LEVEL_3                   = -25; // inches
+    public static final double      SLIDE_LEVEL_4                   = -38; // inches
+
+    private static final double     TICKS_PER_MOTOR_REV             = 384.5; // goBilda 1150  //312 RPM  537.7
+    private static final double     PULLEY_DIA                      = 40; // milimeters
+    private static final double     SLIDE_LIFT_DISTANCE_PER_REV     = PULLEY_DIA * Math.PI / 25.4; //  lift = circimference of the pulley converted to inches
+    private static final double     TICKS_PER_LIFT_IN               = TICKS_PER_MOTOR_REV / SLIDE_LIFT_DISTANCE_PER_REV; // 109 and change
 
 
+    public double  targetHeight;
+
+
+
+
+
+    LinearOpMode opmode;
     HardwareMap hwMap           =  null;
     private ElapsedTime runtime  = new ElapsedTime();
 
-    public Power8648HardwarePushbot(){
+    public enum SlideTrainerState {
+        UNKNOWN,
+        IDLE,
+        LOW,
+        MID,
+        HIGH,
+        EXTRA_HIGH
+    }
+
+    public double getRightSlidePos(){
+        double slidePos;
+        slidePos = rightLinear.getCurrentPosition()/ TICKS_PER_LIFT_IN; //returns in inches
+        return  slidePos;
+    }
+    public double getLeftSlidePos(){
+        double slidePos;
+        slidePos = leftLinear.getCurrentPosition()/ TICKS_PER_LIFT_IN; //returns in inches
+        return  slidePos;
+    }
+
+
+
+    public void  setSlideLevel1(){
+
+        targetHeight = ( SLIDE_LEVEL_1 );
+        liftToTargetHeight(targetHeight,3);
+        //servo.setPosition(0);
+    }
+
+    public void setSlideLevel2(){
+        targetHeight = ( SLIDE_LEVEL_2);
+        liftToTargetHeight(targetHeight,3);
+        //servo.setPosition(0);
+    }
+
+    public void setSlideLevel3(){
+        targetHeight = ( SLIDE_LEVEL_3);
+        liftToTargetHeight(targetHeight,10);
+        //servo.setPosition(1.0);
+    }
+
+    public void setSlideLevel4(){
+        targetHeight = ( SLIDE_LEVEL_4);
+        liftToTargetHeight(targetHeight,3);
+        //servo.setPosition(1.0);
+    }
+
+    public Power8648HardwarePushbot(LinearOpMode opmode){
+        this.opmode = opmode;
+    }
+    /*public Slide_Trainer(LinearOpMode opmode) {
+        this.opmode = opmode;
 
     }
+
+     */
     public void init(HardwareMap ahwMap, boolean inTeleOp){
         hwMap = ahwMap;
         leftFront  = hwMap.get(DcMotor.class, "left_front");
@@ -94,5 +172,33 @@ public class Power8648HardwarePushbot {
         }
 
 
+    }
+    public void liftToTargetHeight(double height, double timeoutS) {
+
+        int newTargetHeight;
+
+
+        // Ensure that the opmode is still active
+        if (opmode.opModeIsActive()) {
+
+            // Determine new target lift height in ticks based on the current position.
+            // When the match starts the current position should be reset to zero.
+
+            newTargetHeight = (int) (height * TICKS_PER_LIFT_IN);
+            // Set the target now that is has been calculated
+            rightLinear.setTargetPosition(newTargetHeight);
+            leftLinear.setTargetPosition(newTargetHeight);
+
+            // Turn On RUN_TO_POSITION
+            rightLinear.setPower(Math.abs(SLIDELIFTSPEED));
+            leftLinear.setPower(Math.abs(SLIDELIFTSPEED));
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        }
     }
 }

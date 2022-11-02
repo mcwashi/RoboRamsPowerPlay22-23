@@ -3,14 +3,21 @@ package org.firstinspires.ftc.teamcode.Team8648;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
 @TeleOp(name="8648 RAMMY Teleop", group="Pushbot")
-@Disabled
+//@Disabled
 public class Power8648Teleop extends LinearOpMode {
-    Power8648HardwarePushbot robot           = new Power8648HardwarePushbot();
+    Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
+    Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
+    double slideError = 0.5;
+    double pos;
+    private ElapsedTime runtime = new ElapsedTime();
+
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, true);
@@ -53,9 +60,18 @@ public class Power8648Teleop extends LinearOpMode {
             robot.leftLinear.setPower(-gamepad2.right_stick_y);
             robot.rightLinear.setPower(-gamepad2.right_stick_y);
 
-            if(gamepad2.dpad_up)
-                robot.rightLinear.setTargetPosition(1);
-                robot.leftLinear.setTargetPosition(-1);
+            if (gamepad2.dpad_up) {
+                robot.setSlideLevel3();
+                slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.HIGH;
+            }
+
+
+
+            /*if(gamepad2.dpad_up)
+                robot.rightLinear.setTargetPosition(13);
+                robot.leftLinear.setTargetPosition(-13);
+
+             */
 
 
             if(gamepad1.dpad_up){
@@ -91,7 +107,14 @@ public class Power8648Teleop extends LinearOpMode {
                 robot.rightClaw.setPosition(0);
 
             }
+            telemetry.addData("Target Position", robot.targetHeight);
+            telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
+            telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
 
+            telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
+            telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
+
+            telemetry.update();
         }
     }
 }

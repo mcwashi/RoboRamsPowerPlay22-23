@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "8648 Chassis Test Autonomous", group = "Concept")
-//@Disabled
+@Disabled
 public class ChassisTestAuto extends LinearOpMode {
     ChassisTestHardwarePushbot robot = new ChassisTestHardwarePushbot();
     private ElapsedTime runtime = new ElapsedTime();
