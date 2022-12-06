@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.ChassisTestHardwarePushbot;
 
 @Autonomous(name = "8648 RAMMY AUTO TEST", group = "Concept")
-//@Disabled
+@Disabled
 public class Power8648TestAuto extends LinearOpMode {
     ChassisTestHardwarePushbot robot = new ChassisTestHardwarePushbot();
     private ElapsedTime runtime = new ElapsedTime();

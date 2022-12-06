@@ -6,12 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
-
-@TeleOp(name="8648 RAMMY Teleop", group="Pushbot")
+@TeleOp(name="8648 RAMMY Test Teleop", group="Pushbot")
 //@Disabled
-public class Power8648Teleop extends LinearOpMode {
+public class Power8648TestTeleop extends LinearOpMode {
     Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
     Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
     double slideError = 0.5;
@@ -21,8 +19,6 @@ public class Power8648Teleop extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, true);
-        robot.rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("Say", "Hello Driver");
         telemetry.update();
 
@@ -59,8 +55,8 @@ public class Power8648Teleop extends LinearOpMode {
             robot.leftBack.setPower(lb);
             robot.rightBack.setPower(rb);
 
-            //robot.leftLinear.setPower(-gamepad2.right_stick_y);
-            //robot.rightLinear.setPower(-gamepad2.right_stick_y);
+            robot.leftLinear.setPower(-gamepad2.right_stick_y);
+            robot.rightLinear.setPower(-gamepad2.right_stick_y);
 
 
 
@@ -68,23 +64,19 @@ public class Power8648Teleop extends LinearOpMode {
 
             }
             if (gamepad2.dpad_up) {
-                encoderLinear(1.0, -26.5, -26.5, 10);
-
-            }
-            if (gamepad2.dpad_right) {
-                encoderLinear(1.0, -20.5, -20.5, 10);
-
-            }
-            if (gamepad2.dpad_left) {
-                encoderLinear(1.0, -11.5, -11.5, 10);
-
-            }
-            if (gamepad2.left_bumper) {
-                encoderLinear(1.0, -1.5, -1.5, 10);
+                encoderLinear(1.0, -15, -15, 10);
 
             }
             if (gamepad2.dpad_down) {
-                resetLinear();
+                robot.leftLinear.setTargetPosition(0);
+                robot.leftLinear.setTargetPosition(0);
+                //sleep(3000);
+                // this works, but there is still power being given to motor
+                //robot.rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                //robot.leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                //robot.leftLinear.setPower(0);
+                //robot.leftLinear.setPower(0);
+
 
             }
 
@@ -150,43 +142,25 @@ public class Power8648Teleop extends LinearOpMode {
             newRightLinearTarget = robot.rightLinear.getCurrentPosition() + (int)(rightInches * robot.TICKS_PER_LIFT_IN);
             newLeftLinearTarget = robot.leftLinear.getCurrentPosition() + (int)(leftInches * robot.TICKS_PER_LIFT_IN);
 
-            //Sets the target position
             robot.leftLinear.setTargetPosition(newLeftLinearTarget);
             robot.rightLinear.setTargetPosition(newRightLinearTarget);
             // Turn On RUN_TO_POSITION
-            robot.leftLinear.setPower(Math.abs(speed));
-            robot.rightLinear.setPower(Math.abs(speed));
-
-            //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            runtime.reset();
-            //robot.leftLinear.setPower(Math.abs(speed));
-            //robot.rightLinear.setPower(Math.abs(speed));
-
             robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            telemetry.addData("Target Position", robot.targetHeight);
-            telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
-            telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
-
-            telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-            telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
-
-            telemetry.update();
+            // reset the timeout time and start motion.
+            runtime.reset();
+            robot.leftLinear.setPower(Math.abs(speed));
+            robot.rightLinear.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
             // its target position, the motion will stop.  This is "safer" in the event that the robot will
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            /*
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
                     (robot.leftLinear.isBusy() && robot.rightLinear.isBusy())) {
-
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d", newRightLinearTarget, newLeftLinearTarget);
@@ -197,24 +171,6 @@ public class Power8648Teleop extends LinearOpMode {
                 telemetry.update();
             }
 
-             */
-
-            /*
-           if(gamepad2.dpad_down){
-               robot.leftLinear.setTargetPosition(0);
-               robot.rightLinear.setTargetPosition(0);
-
-               sleep(3000);
-
-               robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-               robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-               robot.leftLinear.setPower(0);
-               robot.rightLinear.setPower(0);
-
-           }
-
-             */
             // Stop all motion;
             //robot.leftLinear.setPower(0);
             //robot.rightLinear.setPower(0);
@@ -229,36 +185,12 @@ public class Power8648Teleop extends LinearOpMode {
            // robot.rightLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
            // robot.leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
            // robot.rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            /*
-            sleep(3000);
-            robot.leftLinear.setTargetPosition(0);
-            robot.rightLinear.setTargetPosition(0);
 
-            sleep(3000);
+           // sleep(3000);
 
-            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            robot.leftLinear.setPower(0);
-            robot.rightLinear.setPower(0);
-
-             */
-
-
+            //robot.leftLinear.setPower(0);
+            //robot.rightLinear.setPower(0);
             // optional pause after each move
         }
     }
-    public void resetLinear(){
-        robot.leftLinear.setTargetPosition(0);
-        robot.rightLinear.setTargetPosition(0);
-
-        sleep(2000);
-
-        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        robot.leftLinear.setPower(0);
-        robot.rightLinear.setPower(0);
-    }
-
 }

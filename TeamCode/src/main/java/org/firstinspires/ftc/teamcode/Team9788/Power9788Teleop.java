@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Team8648;
+package org.firstinspires.ftc.teamcode.Team9788;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
-@TeleOp(name="8648 RAMMY Teleop", group="Pushbot")
-//@Disabled
-public class Power8648Teleop extends LinearOpMode {
+@TeleOp(name="9788 RAMMY Teleop", group="Pushbot")
+@Disabled
+public class Power9788Teleop extends LinearOpMode {
     Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
     Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
     double slideError = 0.5;
@@ -21,8 +21,6 @@ public class Power8648Teleop extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap, true);
-        robot.rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("Say", "Hello Driver");
         telemetry.update();
 
@@ -59,28 +57,21 @@ public class Power8648Teleop extends LinearOpMode {
             robot.leftBack.setPower(lb);
             robot.rightBack.setPower(rb);
 
-            //robot.leftLinear.setPower(-gamepad2.right_stick_y);
-            //robot.rightLinear.setPower(-gamepad2.right_stick_y);
 
-
-
-            if(gamepad2.y){
-
-            }
             if (gamepad2.dpad_up) {
-                encoderLinear(1.0, -26.5, -26.5, 10);
+                encoderLinear(1.0, 26.5, 26.5, 10);
 
             }
             if (gamepad2.dpad_right) {
-                encoderLinear(1.0, -20.5, -20.5, 10);
+                encoderLinear(1.0, 20.5, 20.5, 10);
 
             }
             if (gamepad2.dpad_left) {
-                encoderLinear(1.0, -11.5, -11.5, 10);
+                encoderLinear(1.0, 11.5, 11.5, 10);
 
             }
             if (gamepad2.left_bumper) {
-                encoderLinear(1.0, -1.5, -1.5, 10);
+                encoderLinear(1.0, 1.5, 1.5, 10);
 
             }
             if (gamepad2.dpad_down) {
@@ -120,12 +111,12 @@ public class Power8648Teleop extends LinearOpMode {
                 robot.rightBack.setPower(-0.5);
             }
             if(gamepad2.a) {
-                robot.leftClaw.setPosition(0);
-                robot.rightClaw.setPosition(0);}
+                robot.leftClaw.setPosition(0.42);
+                robot.rightClaw.setPosition(0.45);}
             else{
-                robot.leftClaw.setPosition(1);
-                robot.rightClaw.setPosition(1);
-                }
+                robot.leftClaw.setPosition(0.5);
+                robot.rightClaw.setPosition(0.5);
+            }
 
             telemetry.addData("Target Position", robot.targetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
@@ -138,8 +129,8 @@ public class Power8648Teleop extends LinearOpMode {
         }
     }
     public void encoderLinear(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
+                              double leftInches, double rightInches,
+                              double timeoutS) {
         int newLeftLinearTarget;
         int newRightLinearTarget;
         //create variables for new targets
@@ -225,10 +216,10 @@ public class Power8648Teleop extends LinearOpMode {
             //robot.leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             //robot.rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             // Turn off RUN_TO_POSITION
-           // robot.leftLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-           // robot.rightLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-           // robot.leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-           // robot.rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            // robot.leftLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            // robot.rightLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            // robot.leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            // robot.rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             /*
             sleep(3000);
             robot.leftLinear.setTargetPosition(0);
@@ -260,5 +251,4 @@ public class Power8648Teleop extends LinearOpMode {
         robot.leftLinear.setPower(0);
         robot.rightLinear.setPower(0);
     }
-
 }

@@ -44,10 +44,7 @@ public class Power8648LinearTest extends LinearOpMode {
         waitForStart();
         runtime.reset();
         //code goes here
-        encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
-        sleep(1000);
-        encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
-        sleep(1000);
+        encoderLinear(robot.DRIVE_SPEED, 48.0, 48.0,3);
      
 
 
@@ -155,6 +152,8 @@ public class Power8648LinearTest extends LinearOpMode {
                     (robot.leftLinear.isBusy() || robot.rightLinear.isBusy())) {
 
                 // Display it for the driver.
+                telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
+                telemetry.addData("Actual Left Position","%.1f", robot.getLeftSlidePos());
                 telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
                 telemetry.addData("Path2",  "Running at %7d :%7d",
                         robot.leftLinear.getCurrentPosition(),

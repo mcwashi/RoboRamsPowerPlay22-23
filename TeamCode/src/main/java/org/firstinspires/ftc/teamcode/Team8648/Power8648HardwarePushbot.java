@@ -40,10 +40,10 @@ public class Power8648HardwarePushbot {
     public static final double      SLIDE_LEVEL_3                   = -25; // inches
     public static final double      SLIDE_LEVEL_4                   = -38; // inches
 
-    private static final double     TICKS_PER_MOTOR_REV             = 384.5; // goBilda 1150  //312 RPM  537.7
+    private static final double     TICKS_PER_MOTOR_REV             = 537.7; // goBilda 1150  //312 RPM  537.7
     private static final double     PULLEY_DIA                      = 40; // milimeters
     private static final double     SLIDE_LIFT_DISTANCE_PER_REV     = PULLEY_DIA * Math.PI / 25.4; //  lift = circimference of the pulley converted to inches
-    private static final double     TICKS_PER_LIFT_IN               = TICKS_PER_MOTOR_REV / SLIDE_LIFT_DISTANCE_PER_REV; // 109 and change
+    public static final double     TICKS_PER_LIFT_IN               = TICKS_PER_MOTOR_REV / SLIDE_LIFT_DISTANCE_PER_REV; // 109 and change
 
 
     public double  targetHeight;
@@ -112,6 +112,15 @@ public class Power8648HardwarePushbot {
     }
 
      */
+
+    public void resetLinear(){
+        leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftLinear.setTargetPosition(0);
+        rightLinear.setTargetPosition(0);
+
+    }
     public void init(HardwareMap ahwMap, boolean inTeleOp){
         hwMap = ahwMap;
         leftFront  = hwMap.get(DcMotor.class, "left_front");
@@ -141,7 +150,6 @@ public class Power8648HardwarePushbot {
         rightLinear.setPower(0);
         leftLinear.setPower(0);
 
-
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -149,6 +157,8 @@ public class Power8648HardwarePushbot {
 
         rightLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftClaw = hwMap.get(Servo.class, "left_claw");
         rightClaw = hwMap.get(Servo.class, "right_claw");
