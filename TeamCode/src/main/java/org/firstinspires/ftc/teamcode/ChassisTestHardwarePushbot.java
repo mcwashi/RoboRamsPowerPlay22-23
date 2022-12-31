@@ -14,8 +14,11 @@ public class ChassisTestHardwarePushbot {
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
 
+    public BNO055IMU       imu         = null;      // Control/Expansion Hub IMU
 
-    public static final double     COUNTS_PER_MOTOR_REV    = 312 ;    // eg: TETRIX Motor Encoder
+
+
+    public static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
     public static final double     DRIVE_GEAR_REDUCTION    = 1.0;     // This is < 1.0 if geared UP
     public static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /

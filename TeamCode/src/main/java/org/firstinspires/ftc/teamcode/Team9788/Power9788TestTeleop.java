@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
 @TeleOp(name="9788 RAMMY Test Teleop", group="Pushbot")
-@Disabled
+//@Disabled
 public class Power9788TestTeleop extends LinearOpMode {
     Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
     Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
@@ -62,11 +62,12 @@ public class Power9788TestTeleop extends LinearOpMode {
 
 
 
+
             if(gamepad2.y){
 
             }
             if (gamepad2.dpad_up) {
-                encoderLinear(1.0, -15, -15, 10);
+                encoderLinear(1.0, 15, 15, 10);
 
             }
             if (gamepad2.dpad_down) {
@@ -121,9 +122,14 @@ public class Power9788TestTeleop extends LinearOpMode {
                 robot.rightClaw.setPosition(1);
                 }
 
-            telemetry.addData("Target Position", robot.targetHeight);
+            telemetry.addData("Right Claw Position","%.1f", robot.rightClaw.getPosition());
+            telemetry.addData("Left Claw Position","%.1f", robot.leftClaw.getPosition());
+
+
+            telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
+            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
-            telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
+            telemetry.addData("Actual Left Position","%.1f", robot.getLeftSlidePos());
 
             telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
             telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());

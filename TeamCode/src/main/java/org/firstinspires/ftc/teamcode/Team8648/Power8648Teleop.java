@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
 @TeleOp(name="8648 RAMMY Teleop", group="Pushbot")
-//@Disabled
+@Disabled
 public class Power8648Teleop extends LinearOpMode {
     Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
     Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
@@ -84,6 +84,7 @@ public class Power8648Teleop extends LinearOpMode {
 
             }
             if (gamepad2.dpad_down) {
+
                 resetLinear();
 
             }
@@ -127,7 +128,8 @@ public class Power8648Teleop extends LinearOpMode {
                 robot.rightClaw.setPosition(1);
                 }
 
-            telemetry.addData("Target Position", robot.targetHeight);
+            telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
+            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
             telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
 
@@ -168,7 +170,8 @@ public class Power8648Teleop extends LinearOpMode {
             robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            telemetry.addData("Target Position", robot.targetHeight);
+            telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
+            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
             telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
 
@@ -252,13 +255,22 @@ public class Power8648Teleop extends LinearOpMode {
         robot.leftLinear.setTargetPosition(0);
         robot.rightLinear.setTargetPosition(0);
 
-        sleep(2000);
 
+        if((robot.getRightSlidePos() == 0) && (robot.getLeftSlidePos() == 0)){
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            robot.leftLinear.setPower(0);
+            robot.rightLinear.setPower(0);
+        }
+        /*
         robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         robot.leftLinear.setPower(0);
         robot.rightLinear.setPower(0);
+
+         */
     }
 
 }

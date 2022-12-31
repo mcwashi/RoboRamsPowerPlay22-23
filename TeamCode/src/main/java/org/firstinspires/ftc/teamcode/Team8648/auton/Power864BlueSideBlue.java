@@ -37,7 +37,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-//@Disabled
+@Disabled
 public class Power864BlueSideBlue extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE

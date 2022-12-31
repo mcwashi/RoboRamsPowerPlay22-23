@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ChassisTestHardwarePushbot;
+import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 import org.firstinspires.ftc.teamcode.Team9788.auton.Power9788Pipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -38,11 +39,11 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-@Disabled
+//@Disabled
 public class Power9788RedSideBlue extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
-    ChassisTestHardwarePushbot robot = new ChassisTestHardwarePushbot();
+    Power8648HardwarePushbot robot = new Power8648HardwarePushbot(this);
     private ElapsedTime runtime = new ElapsedTime();
     OpenCvCamera camera;
     Power9788Pipeline power9788Pipeline;
@@ -201,29 +202,30 @@ public class Power9788RedSideBlue extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, -4.0, -4.0,-4.0, -4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 38.0, -38.0,-38.0, 38.0, 10);
+            encoderDrive(robot.TURN_SPEED, -38.0, 38.0,38.0, -38.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, -48.0, -48.0,-48.0, -48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
             sleep(1000);
+
         }else if(tagOfInterest.id == MIDDLE){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, -4.0, -4.0,-4.0, -4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -56.0, 56.0,56.0, -56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, -90.0, -90.0,-90.0, -90.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 51.0, -51.0,-51.0, 51.0, 10);
+            encoderDrive(robot.TURN_SPEED, -51.0, 51.0,51.0, -51.0, 10);
             sleep(1000);
         }else{
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, -4.0, -4.0,-4.0, -4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -56.0, 56.0,56.0, -56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, -48.0, -48.0,-48.0, -48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
             sleep(1000);
             //encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
             //sleep(1000);
@@ -231,6 +233,83 @@ public class Power9788RedSideBlue extends LinearOpMode
         }
 
 
+    }
+    public void resetLinear(){
+        robot.leftLinear.setTargetPosition(0);
+        robot.rightLinear.setTargetPosition(0);
+
+
+        if((robot.getRightSlidePos() == 0) && (robot.getLeftSlidePos() == 0)){
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            robot.leftLinear.setPower(0);
+            robot.rightLinear.setPower(0);
+        }
+        /*
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robot.leftLinear.setPower(0);
+        robot.rightLinear.setPower(0);
+
+         */
+    }
+    public void encoderLinear(double speed,
+                              double leftInches, double rightInches,
+                              double timeoutS) {
+        int newLeftLinearTarget;
+        int newRightLinearTarget;
+        //create variables for new targets
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newRightLinearTarget = robot.rightLinear.getCurrentPosition() + (int)(rightInches * robot.TICKS_PER_LIFT_IN);
+            newLeftLinearTarget = robot.leftLinear.getCurrentPosition() + (int)(leftInches * robot.TICKS_PER_LIFT_IN);
+
+            //Sets the target position
+            robot.leftLinear.setTargetPosition(newLeftLinearTarget);
+            robot.rightLinear.setTargetPosition(newRightLinearTarget);
+            // Turn On RUN_TO_POSITION
+            robot.leftLinear.setPower(Math.abs(speed));
+            robot.rightLinear.setPower(Math.abs(speed));
+
+            //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            //robot.leftLinear.setPower(Math.abs(speed));
+            //robot.rightLinear.setPower(Math.abs(speed));
+
+            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.leftLinear.isBusy() || robot.rightFront.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
+                telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
+                telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
+                telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
+
+                telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
+                telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
+
+                telemetry.update();
+            }
+            resetLinear();
+        }
     }
     public void encoderDrive(double speed,
                              double leftFInches, double rightFInches, double leftBInches, double rightBInches,

@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Team8648;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -19,9 +20,10 @@ public class Power8648HardwarePushbot {
     public Servo leftClaw = null;
     public Servo rightClaw = null;
 
+    public BNO055IMU imu         = null;
 
 
-    public static final double     COUNTS_PER_MOTOR_REV    = 312 ;    // eg: TETRIX Motor Encoder
+    public static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
     public static final double     DRIVE_GEAR_REDUCTION    = 1.0;     // This is < 1.0 if geared UP
     public static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     public static final double     LINEAR_DIAMETER_INCHES  = 1.5 ;     // For figuring circumference
@@ -29,7 +31,7 @@ public class Power8648HardwarePushbot {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     public static final double     COUNTS_PER_LINEAR_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (LINEAR_DIAMETER_INCHES * 3.1415);
-    public static final double     DRIVE_SPEED             = 0.7;
+    public static final double     DRIVE_SPEED             = 0.3;
     public static final double     TURN_SPEED              = 0.6;
     public static final double     LINEAR_SPEED              = 0.6;
 
@@ -46,7 +48,9 @@ public class Power8648HardwarePushbot {
     public static final double     TICKS_PER_LIFT_IN               = TICKS_PER_MOTOR_REV / SLIDE_LIFT_DISTANCE_PER_REV; // 109 and change
 
 
-    public double  targetHeight;
+    public double  leftLinearTargetHeight;
+    public double  rightLinearTargetHeight;
+
 
 
 
@@ -65,6 +69,7 @@ public class Power8648HardwarePushbot {
         EXTRA_HIGH
     }
 
+
     public double getRightSlidePos(){
         double slidePos;
         slidePos = rightLinear.getCurrentPosition()/ TICKS_PER_LIFT_IN; //returns in inches
@@ -76,32 +81,6 @@ public class Power8648HardwarePushbot {
         return  slidePos;
     }
 
-
-
-    public void  setSlideLevel1(){
-
-        targetHeight = ( SLIDE_LEVEL_1 );
-        liftToTargetHeight(targetHeight,3);
-        //servo.setPosition(0);
-    }
-
-    public void setSlideLevel2(){
-        targetHeight = ( SLIDE_LEVEL_2);
-        liftToTargetHeight(targetHeight,3);
-        //servo.setPosition(0);
-    }
-
-    public void setSlideLevel3(){
-        targetHeight = ( SLIDE_LEVEL_3);
-        liftToTargetHeight(targetHeight,10);
-        //servo.setPosition(1.0);
-    }
-
-    public void setSlideLevel4(){
-        targetHeight = ( SLIDE_LEVEL_4);
-        liftToTargetHeight(targetHeight,3);
-        //servo.setPosition(1.0);
-    }
 
     public Power8648HardwarePushbot(LinearOpMode opmode){
         this.opmode = opmode;

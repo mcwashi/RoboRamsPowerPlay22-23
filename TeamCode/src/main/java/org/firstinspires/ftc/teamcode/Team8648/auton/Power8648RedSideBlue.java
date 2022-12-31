@@ -39,7 +39,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-//@Disabled
+@Disabled
 public class Power8648RedSideBlue extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
@@ -202,20 +202,15 @@ public class Power8648RedSideBlue extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
-            robot.leftClaw.setPosition(1);
-            robot.rightClaw.setPosition(1);
             encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
             encoderDrive(robot.TURN_SPEED, -38.0, 38.0,38.0, -38.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 92.0, 92.0,92.0, 92.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 24.0, -24.0,-24.0, 24.0, 10);
-            sleep(1000);
-            encoderLinear(1.0, -26.5, -26.5, 10);
-            encoderDrive(robot.TURN_SPEED, 6.0, 6.0,6.0, 6.0, 10);
-            sleep(1000);
-            resetLinear();
+
+            //sleep(1000);
+            //resetLinear();
         }else if(tagOfInterest.id == MIDDLE){
             //trajectory
             encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
@@ -280,8 +275,8 @@ public class Power8648RedSideBlue extends LinearOpMode
             robot.leftLinear.setTargetPosition(newLeftLinearTarget);
             robot.rightLinear.setTargetPosition(newRightLinearTarget);
             // Turn On RUN_TO_POSITION
-            robot.leftLinear.setPower(Math.abs(speed));
-            robot.rightLinear.setPower(Math.abs(speed));
+            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -291,8 +286,10 @@ public class Power8648RedSideBlue extends LinearOpMode
             //robot.leftLinear.setPower(Math.abs(speed));
             //robot.rightLinear.setPower(Math.abs(speed));
 
-            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftLinear.setPower(Math.abs(speed));
+            robot.rightLinear.setPower(Math.abs(speed));
 
 
             // keep looping while we are still active, and there is time left, and both motors are running.
@@ -301,21 +298,25 @@ public class Power8648RedSideBlue extends LinearOpMode
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.leftLinear.isBusy() || robot.rightFront.isBusy())) {
-
+            while (opModeIsActive()){
                 // Display it for the driver.
-                telemetry.addData("Target Position", robot.targetHeight);
-                telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
-                telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
-
-                telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-                telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
+                telemetry.addData("Path1",  "Running to %7d :%7d", newRightLinearTarget, newLeftLinearTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                        robot.rightLinear.getCurrentPosition(),
+                        robot.leftLinear.getCurrentPosition());
 
                 telemetry.update();
             }
-            resetLinear();
+
+            robot.leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            robot.rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            robot.leftLinear.setPower(0);
+            robot.rightLinear.setPower(0);
+
+
+
+
         }
     }
     public void encoderDrive(double speed,
@@ -358,9 +359,23 @@ public class Power8648RedSideBlue extends LinearOpMode
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
 
-            sleep(10000);
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (robot.leftFront.isBusy() || robot.rightFront.isBusy() && robot.leftBack.isBusy() || robot.rightBack.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d :%7d :%7d", newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d :%7d :%7d",
+                        robot.leftFront.getCurrentPosition(),
+                        robot.rightFront.getCurrentPosition(),
+                        robot.leftBack.getCurrentPosition(),
+                        robot.rightBack.getCurrentPosition());
+
+                telemetry.update();
+            }
 
             // Stop all motion;
+
             robot.leftFront.setPower(0);
             robot.leftBack.setPower(0);
             robot.rightFront.setPower(0);

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @TeleOp(name="8648 RAMMY Test Teleop", group="Pushbot")
-//@Disabled
+@Disabled
 public class Power8648TestTeleop extends LinearOpMode {
     Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
     Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
@@ -119,7 +119,8 @@ public class Power8648TestTeleop extends LinearOpMode {
                 robot.rightClaw.setPosition(1);
                 }
 
-            telemetry.addData("Target Position", robot.targetHeight);
+            telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
+            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
             telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
 

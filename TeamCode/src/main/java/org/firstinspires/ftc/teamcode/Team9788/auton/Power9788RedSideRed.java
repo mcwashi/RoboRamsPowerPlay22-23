@@ -38,7 +38,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-@Disabled
+//@Disabled
 public class Power9788RedSideRed extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
@@ -201,29 +201,29 @@ public class Power9788RedSideRed extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, -4.0, -4.0,-4.0, -4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 38.0, -38.0,-38.0, 38.0, 10);
+            encoderDrive(robot.TURN_SPEED, -38.0, 38.0,38.0, -38.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, -48.0, -48.0,-48.0, -48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
             sleep(1000);
         }else if(tagOfInterest.id == MIDDLE){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, -4.0, -4.0,-4.0, -4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -56.0, 56.0,56.0, -56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, -90.0, -90.0,-90.0, -90.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 51.0, -51.0,-51.0, 51.0, 10);
+            encoderDrive(robot.TURN_SPEED, -51.0, 51.0,51.0, -51.0, 10);
             sleep(1000);
         }else{
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, -4.0, -4.0,-4.0, -4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -56.0, 56.0,56.0, -56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, -52.0, -52.0,-52.0, -52.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 52.0, 52.0,52.0, 52.0, 10);
             sleep(1000);
             //encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
             //sleep(1000);

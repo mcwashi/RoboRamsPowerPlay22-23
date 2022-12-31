@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.Team9788.auton;
+package org.firstinspires.ftc.teamcode.Team8648.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -28,8 +28,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.ChassisTestHardwarePushbot;
-import org.firstinspires.ftc.teamcode.Team9788.auton.Power9788Pipeline;
+import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -38,15 +37,17 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-//@Disabled
-public class Power9788BlueSideBlue extends LinearOpMode
+@Disabled
+public class Power8648TestConeDelivery extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
-    ChassisTestHardwarePushbot robot = new ChassisTestHardwarePushbot();
+    Power8648HardwarePushbot robot = new Power8648HardwarePushbot(this);
     private ElapsedTime runtime = new ElapsedTime();
     OpenCvCamera camera;
-    Power9788Pipeline power9788Pipeline;
+    Power8648Pipeline power8648Pipeline;
     static final double FEET_PER_METER = 3.28084;
+
+
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -74,9 +75,9 @@ public class Power9788BlueSideBlue extends LinearOpMode
     {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        power9788Pipeline = new Power9788Pipeline(tagsize, fx, fy, cx, cy);
+        power8648Pipeline = new Power8648Pipeline(tagsize, fx, fy, cx, cy);
 
-        camera.setPipeline(power9788Pipeline);
+        camera.setPipeline(power8648Pipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -126,7 +127,29 @@ public class Power9788BlueSideBlue extends LinearOpMode
          */
         while (!isStarted() && !isStopRequested())
         {
-            ArrayList<AprilTagDetection> currentDetections = power9788Pipeline.getLatestDetections();
+            telemetry.addData("Status", "Resetting Encoders");    //resets encoders
+
+
+            robot.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            telemetry.addData("Path0", "Starting at %7d :%7d :%7d :%7d",
+                    robot.leftFront.getCurrentPosition(),
+                    robot.leftBack.getCurrentPosition(),
+                    robot.rightFront.getCurrentPosition(),
+                    robot.rightBack.getCurrentPosition());
+            telemetry.update(); //gets current positions of encoders, should be zero
+
+            telemetry.addData(">", "Press Play to start op mode");
+            telemetry.update();
+            ArrayList<AprilTagDetection> currentDetections = power8648Pipeline.getLatestDetections();
 
             if(currentDetections.size() != 0)
             {
@@ -201,35 +224,128 @@ public class Power9788BlueSideBlue extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
+            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48, 10);
+
+            /*
             encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -44.0, 44.0,44.0, -44.0, 10);
-            sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 44.0, 44.0,44.0, 44.0, 10);
-            sleep(1000);
-        }else if(tagOfInterest.id == MIDDLE){
-            //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
-            sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -44.0, 44.0,44.0, -44.0, 10);
+            encoderDrive(robot.TURN_SPEED, -38.0, 38.0,38.0, -38.0, 10);
             sleep(1000);
             encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 44.0, -44.0,-44.0, 44.0, 10);
-            sleep(1000);
-        }else{
+
+             */
+            //sleep(1000);
+            //resetLinear();
+        }else if(tagOfInterest.id == MIDDLE){
             //trajectory
             encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
             encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 44.0, 44.0,44.0, 44.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
+            sleep(1000);
+            encoderDrive(robot.TURN_SPEED, -51.0, 51.0,51.0, -51.0, 10);
+            sleep(1000);
+        }else{
+            //trajectory
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            sleep(1000);
+            encoderDrive(robot.TURN_SPEED, 59.0, -59.0,-59.0, 59.0, 10);
+            sleep(1000);
+            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
+            sleep(1000);
+            encoderDrive(robot.TURN_SPEED, -66.0, 66.0,66.0, -66.0, 10);
             sleep(1000);
             //encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
             //sleep(1000);
+
         }
 
 
+    }
+    public void goToHigh(){
+        robot.leftLinear.setTargetPosition((int)-26.5);
+        robot.rightLinear.setTargetPosition((int)-26.5);
+
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        sleep(5000);
+
+    }
+    public void resetLinear(){
+        robot.leftLinear.setTargetPosition(0);
+        robot.rightLinear.setTargetPosition(0);
+
+        sleep(2000);
+
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robot.leftLinear.setPower(0);
+        robot.rightLinear.setPower(0);
+    }
+    public void encoderLinear(double speed,
+                              double leftInches, double rightInches,
+                              double timeoutS) {
+        int newLeftLinearTarget;
+        int newRightLinearTarget;
+        //create variables for new targets
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newRightLinearTarget = robot.rightLinear.getCurrentPosition() + (int)(rightInches * robot.TICKS_PER_LIFT_IN);
+            newLeftLinearTarget = robot.leftLinear.getCurrentPosition() + (int)(leftInches * robot.TICKS_PER_LIFT_IN);
+
+            //Sets the target position
+            robot.leftLinear.setTargetPosition(newLeftLinearTarget);
+            robot.rightLinear.setTargetPosition(newRightLinearTarget);
+            // Turn On RUN_TO_POSITION
+            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            //robot.leftLinear.setPower(Math.abs(speed));
+            //robot.rightLinear.setPower(Math.abs(speed));
+
+            //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.leftLinear.setPower(Math.abs(speed));
+            robot.rightLinear.setPower(Math.abs(speed));
+
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            if (opModeIsActive()){
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newRightLinearTarget, newLeftLinearTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                        robot.rightLinear.getCurrentPosition(),
+                        robot.leftLinear.getCurrentPosition());
+
+
+            }
+
+            robot.leftLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            robot.rightLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            robot.leftLinear.setPower(0);
+            robot.rightLinear.setPower(0);
+
+
+
+
+        }
     }
     public void encoderDrive(double speed,
                              double leftFInches, double rightFInches, double leftBInches, double rightBInches,
@@ -270,22 +386,25 @@ public class Power9788BlueSideBlue extends LinearOpMode
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
+
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftFront.isBusy() || robot.rightFront.isBusy() && robot.leftBack.isBusy() || robot.rightBack.isBusy())) {
+                    (robot.leftFront.isBusy() || robot.rightFront.isBusy() || robot.leftBack.isBusy() || robot.rightBack.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d :%7d :%7d", newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
+                telemetry.addData("Path1",  "Running to %7d :%7d :%7d :%7d", (int)(newLeftFrontTarget / robot.COUNTS_PER_INCH),  (int)(newRightFrontTarget / robot.COUNTS_PER_INCH), (int)(newLeftBackTarget / robot.COUNTS_PER_INCH), (int)(newRightBackTarget / robot.COUNTS_PER_INCH));
                 telemetry.addData("Path2",  "Running at %7d :%7d :%7d :%7d",
                         robot.leftFront.getCurrentPosition(),
                         robot.rightFront.getCurrentPosition(),
                         robot.leftBack.getCurrentPosition(),
                         robot.rightBack.getCurrentPosition());
 
+
                 telemetry.update();
             }
 
             // Stop all motion;
+
             robot.leftFront.setPower(0);
             robot.leftBack.setPower(0);
             robot.rightFront.setPower(0);
@@ -300,6 +419,7 @@ public class Power9788BlueSideBlue extends LinearOpMode
             //  sleep(250);   // optional pause after each move
         }
     }
+
 
     void tagToTelemetry(AprilTagDetection detection)
     {

@@ -37,7 +37,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-//@Disabled
+@Disabled
 public class Power864BlueSideRed extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
@@ -220,7 +220,7 @@ public class Power864BlueSideRed extends LinearOpMode
             //trajectory
             encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 58.0, -58.0,-58.0, 58.0, 10);
             sleep(1000);
             encoderDrive(robot.DRIVE_SPEED, 44.0, 44.0,44.0, 44.0, 10);
             sleep(1000);
