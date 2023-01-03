@@ -12,8 +12,7 @@ import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 @TeleOp(name="9788 RAMMY Test Teleop", group="Pushbot")
 //@Disabled
 public class Power9788TestTeleop extends LinearOpMode {
-    Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
-    Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
+    Power9788HardwarePushbot robot           = new Power9788HardwarePushbot(this);
     double slideError = 0.5;
     double pos;
     private ElapsedTime runtime = new ElapsedTime();

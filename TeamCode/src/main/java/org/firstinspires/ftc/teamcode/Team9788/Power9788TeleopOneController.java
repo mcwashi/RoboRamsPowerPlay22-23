@@ -68,20 +68,23 @@ public class Power9788TeleopOneController extends LinearOpMode {
 
             }
             if (gamepad1.dpad_up) {
-                encoderLinear(1.0, 26.5, 26.5, 10);
+                //encoderLinear(1.0, 26.5, 26.5, 10);
+                robot.liftToTargetHeight(10,10);
 
             }
             if (gamepad1.dpad_right) {
-                encoderLinear(1.0, 20.5, 20.5, 10);
+                robot.liftToTargetHeight(20.5,20.5);
+
+                //encoderLinear(1.0, 20.5, 20.5, 10);
 
             }
             if (gamepad1.dpad_left) {
-                encoderLinear(1.0, 11.5, 11.5, 10);
+                robot.liftToTargetHeight(11.5,11.5);
+                //encoderLinear(1.0, 11.5, 11.5, 10);
 
             }
             if (gamepad1.left_bumper) {
-                encoderLinear(1.0, 1.5, 1.5, 10);
-
+                robot.liftToTargetHeight(1.5,1.5);
             }
             if (gamepad1.dpad_down) {
 
@@ -124,13 +127,15 @@ public class Power9788TeleopOneController extends LinearOpMode {
 
              */
             if(gamepad1.a) {
-                robot.leftClaw.setPosition(0);
-                robot.rightClaw.setPosition(0);}
+                robot.leftClaw.setPosition(0.92);
+                robot.rightClaw.setPosition(1);}
             else{
-                robot.leftClaw.setPosition(1);
-                robot.rightClaw.setPosition(1);
+                robot.leftClaw.setPosition(0.96);
+                robot.rightClaw.setPosition(0.95);
                 }
 
+            telemetry.addData("Right Claw Position", robot.rightClaw.getPosition());
+            telemetry.addData("Left Claw Position", robot.leftClaw.getPosition());
             telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
             telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
@@ -258,22 +263,17 @@ public class Power9788TeleopOneController extends LinearOpMode {
         robot.leftLinear.setTargetPosition(0);
         robot.rightLinear.setTargetPosition(0);
 
+        while (opModeIsActive() &&
+                (robot.leftLinear.isBusy() && robot.rightLinear.isBusy())) {
 
-        if((robot.getRightSlidePos() == 0) && (robot.getLeftSlidePos() == 0)){
-            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            robot.leftLinear.setPower(0);
-            robot.rightLinear.setPower(0);
         }
-        /*
+
         robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         robot.leftLinear.setPower(0);
         robot.rightLinear.setPower(0);
 
-         */
     }
 
 }
