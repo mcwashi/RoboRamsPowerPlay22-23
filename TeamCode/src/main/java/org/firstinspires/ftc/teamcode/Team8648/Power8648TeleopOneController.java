@@ -66,19 +66,23 @@ public class Power8648TeleopOneController extends LinearOpMode {
 
             }
             if (gamepad1.dpad_up) {
-                encoderLinear(1.0, -26.5, -26.5, 10);
+                //encoderLinear(1.0, -26.5, -26.5, 10);
+                robot.liftToTargetHeight(-26.5,11.5);
 
             }
             if (gamepad1.dpad_right) {
-                encoderLinear(1.0, -20.5, -20.5, 10);
+                //encoderLinear(1.0, -20.5, -20.5, 10);
+                robot.liftToTargetHeight(-20.5,11.5);
 
             }
             if (gamepad1.dpad_left) {
-                encoderLinear(1.0, -11.5, -11.5, 10);
+                //encoderLinear(1.0, -11.5, -11.5, 10);
+                robot.liftToTargetHeight(-11.5,11.5);
 
             }
             if (gamepad1.left_bumper) {
-                encoderLinear(1.0, -1.5, -1.5, 10);
+                //encoderLinear(1.0, -1.5, -1.5, 10);
+                robot.liftToTargetHeight(-1.5,-1.5);
 
             }
             if (gamepad1.dpad_down) {
@@ -257,21 +261,17 @@ public class Power8648TeleopOneController extends LinearOpMode {
         robot.rightLinear.setTargetPosition(0);
 
 
-        if((robot.getRightSlidePos() == 0) && (robot.getLeftSlidePos() == 0)){
-            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        while (opModeIsActive() &&
+                (robot.leftLinear.isBusy() && robot.rightLinear.isBusy())) {
 
-            robot.leftLinear.setPower(0);
-            robot.rightLinear.setPower(0);
         }
-        /*
+
         robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         robot.leftLinear.setPower(0);
         robot.rightLinear.setPower(0);
 
-         */
     }
 
 }

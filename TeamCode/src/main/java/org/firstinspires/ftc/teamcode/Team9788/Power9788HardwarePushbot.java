@@ -14,7 +14,6 @@ public class Power9788HardwarePushbot {
     public DcMotor leftBack = null;
     public DcMotor rightBack = null;
 
-    public DcMotor leftLinear = null;
     public DcMotor rightLinear = null;
 
     public Servo leftClaw = null;
@@ -29,8 +28,8 @@ public class Power9788HardwarePushbot {
     public static final double     LINEAR_DIAMETER_INCHES  = 1.5 ;     // For figuring circumference
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    public static final double     DRIVE_SPEED             = 0.3;
-    public static final double     TURN_SPEED              = 0.6;
+    public static final double     DRIVE_SPEED             = 0.4;
+    public static final double     TURN_SPEED              = 0.5;
 
     public  static double           SLIDELIFTSPEED                  = -1.0; //
     public static  double           SLIDELOWERSPEED                 = -0.4; // use the LOAD instead of down. Zero pushes wheels off the mat
@@ -45,7 +44,6 @@ public class Power9788HardwarePushbot {
     public static final double     TICKS_PER_LIFT_IN               = TICKS_PER_MOTOR_REV / SLIDE_LIFT_DISTANCE_PER_REV; // 109 and change
 
 
-    public double  leftLinearTargetHeight;
     public double  rightLinearTargetHeight;
 
 
@@ -58,11 +56,6 @@ public class Power9788HardwarePushbot {
     public double getRightSlidePos(){
         double slidePos;
         slidePos = rightLinear.getCurrentPosition()/ TICKS_PER_LIFT_IN; //returns in inches
-        return  slidePos;
-    }
-    public double getLeftSlidePos(){
-        double slidePos;
-        slidePos = leftLinear.getCurrentPosition()/ TICKS_PER_LIFT_IN; //returns in inches
         return  slidePos;
     }
 
@@ -78,10 +71,8 @@ public class Power9788HardwarePushbot {
      */
 
     public void resetLinear(){
-        leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftLinear.setTargetPosition(0);
         rightLinear.setTargetPosition(0);
 
     }
@@ -92,7 +83,6 @@ public class Power9788HardwarePushbot {
         leftBack  = hwMap.get(DcMotor.class, "left_back");
         rightBack = hwMap.get(DcMotor.class, "right_back");
 
-        leftLinear  = hwMap.get(DcMotor.class, "left_linear");
         rightLinear = hwMap.get(DcMotor.class, "right_linear");
 
 
@@ -102,8 +92,7 @@ public class Power9788HardwarePushbot {
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftLinear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightLinear.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         leftBack.setPower(0);
@@ -112,7 +101,6 @@ public class Power9788HardwarePushbot {
         rightFront.setPower(0);
 
         rightLinear.setPower(0);
-        leftLinear.setPower(0);
 
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -120,9 +108,7 @@ public class Power9788HardwarePushbot {
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         leftClaw = hwMap.get(Servo.class, "left_claw");
@@ -146,6 +132,30 @@ public class Power9788HardwarePushbot {
 
         }
 
+    }
+    public void liftToTargetHeight(double height, double timeoutS) {
 
+        int newTargetHeight;
+
+
+        // Ensure that the opmode is still active
+        if (opmode.opModeIsActive()) {
+
+            // Determine new target lift height in ticks based on the current position.
+            // When the match starts the current position should be reset to zero.
+
+            newTargetHeight = (int) (height * TICKS_PER_LIFT_IN);
+            // Set the target now that is has been calculated
+            rightLinear.setTargetPosition(newTargetHeight);
+
+            // Turn On RUN_TO_POSITION
+            rightLinear.setPower(Math.abs(SLIDELIFTSPEED));
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        }
     }
 }

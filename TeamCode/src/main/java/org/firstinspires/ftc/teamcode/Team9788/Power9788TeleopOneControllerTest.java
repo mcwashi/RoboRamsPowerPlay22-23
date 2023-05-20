@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Team9788;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
 @TeleOp(name="9788 RAMMY Teleop One-Controller Test", group="Pushbot")
-//@Disabled
+@Disabled
 public class Power9788TeleopOneControllerTest extends LinearOpMode {
     Power9788HardwarePushbot robot           = new Power9788HardwarePushbot(this);
     private ElapsedTime runtime = new ElapsedTime();
@@ -80,14 +81,10 @@ public class Power9788TeleopOneControllerTest extends LinearOpMode {
                 }
 
             telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
-            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position in Inches","%.1f", robot.getRightSlidePos());
-            telemetry.addData("Actual Left Position in Inches","%.1f", robot.getLeftSlidePos());
-            telemetry.addData("Actual Left Position", robot.leftLinear.getCurrentPosition());
             telemetry.addData("Actual Right Position", robot.rightLinear.getCurrentPosition());
 
             telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-            telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
             telemetry.addData("Lift inch", robot.TICKS_PER_LIFT_IN);
 
 
@@ -108,34 +105,28 @@ public class Power9788TeleopOneControllerTest extends LinearOpMode {
             newTargetHeight = (int) (height);
             // Set the target now that is has been calculated
             robot.rightLinear.setTargetPosition(newTargetHeight);
-            robot.leftLinear.setTargetPosition(newTargetHeight);
 
-            robot.leftLinearTargetHeight = newTargetHeight;
             robot.rightLinearTargetHeight = newTargetHeight;
 
 
             // Turn On RUN_TO_POSITION
             robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
             robot.rightLinear.setPower(speed);
-            robot.leftLinear.setPower(speed);
 
 
         }
     }
     public void resetLinear(){
-        robot.leftLinear.setTargetPosition(0);
         robot.rightLinear.setTargetPosition(0);
 
 
-        if((robot.getRightSlidePos() == 0) && (robot.getLeftSlidePos() == 0)){
+        if((robot.getRightSlidePos() == 0)){
             robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            robot.leftLinear.setPower(0);
             robot.rightLinear.setPower(0);
         }
         /*

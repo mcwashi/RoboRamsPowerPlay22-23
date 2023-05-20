@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
 @TeleOp(name="9788 RAMMY Test Teleop", group="Pushbot")
-//@Disabled
+@Disabled
 public class Power9788TestTeleop extends LinearOpMode {
     Power9788HardwarePushbot robot           = new Power9788HardwarePushbot(this);
     double slideError = 0.5;
@@ -56,7 +56,6 @@ public class Power9788TestTeleop extends LinearOpMode {
             robot.leftBack.setPower(lb);
             robot.rightBack.setPower(rb);
 
-            robot.leftLinear.setPower(gamepad2.right_stick_y);
             robot.rightLinear.setPower(gamepad2.right_stick_y);
 
 
@@ -69,18 +68,7 @@ public class Power9788TestTeleop extends LinearOpMode {
                 encoderLinear(1.0, 15, 15, 10);
 
             }
-            if (gamepad2.dpad_down) {
-                robot.leftLinear.setTargetPosition(0);
-                robot.leftLinear.setTargetPosition(0);
-                //sleep(3000);
-                // this works, but there is still power being given to motor
-                //robot.rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                //robot.leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                //robot.leftLinear.setPower(0);
-                //robot.leftLinear.setPower(0);
 
-
-            }
 
             /*if(gamepad2.dpad_up)
                 robot.rightLinear.setTargetPosition(13);
@@ -126,12 +114,9 @@ public class Power9788TestTeleop extends LinearOpMode {
 
 
             telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
-            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
-            telemetry.addData("Actual Left Position","%.1f", robot.getLeftSlidePos());
 
             telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-            telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
 
             telemetry.update();
         }
@@ -147,17 +132,13 @@ public class Power9788TestTeleop extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             newRightLinearTarget = robot.rightLinear.getCurrentPosition() + (int)(rightInches * robot.TICKS_PER_LIFT_IN);
-            newLeftLinearTarget = robot.leftLinear.getCurrentPosition() + (int)(leftInches * robot.TICKS_PER_LIFT_IN);
 
-            robot.leftLinear.setTargetPosition(newLeftLinearTarget);
             robot.rightLinear.setTargetPosition(newRightLinearTarget);
             // Turn On RUN_TO_POSITION
-            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.leftLinear.setPower(Math.abs(speed));
             robot.rightLinear.setPower(Math.abs(speed));
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -167,13 +148,12 @@ public class Power9788TestTeleop extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftLinear.isBusy() && robot.rightLinear.isBusy())) {
+                    (robot.rightLinear.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newRightLinearTarget, newLeftLinearTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.rightLinear.getCurrentPosition(),
-                        robot.leftLinear.getCurrentPosition());
+                telemetry.addData("Path1",  "Running to %7d", newRightLinearTarget);
+                telemetry.addData("Path2",  "Running at %7d",
+                        robot.rightLinear.getCurrentPosition());
 
                 telemetry.update();
             }

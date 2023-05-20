@@ -202,32 +202,32 @@ public class Power8648RedSideBlue extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -38.0, 38.0,38.0, -38.0, 10);
+            encoderDrive(robot.TURN_SPEED, -29.0, 29.0,29.0, -29.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 26.0, 26.0,28.0, 28.0, 3);
             sleep(1000);
 
             //sleep(1000);
             //resetLinear();
         }else if(tagOfInterest.id == MIDDLE){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 38.0, -38.0,-38.0, 38.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 54.0, 54.0,54.0, 54.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -51.0, 51.0,51.0, -51.0, 10);
+            encoderDrive(robot.TURN_SPEED, -28.0, 28.0,28.0, -28.0, 3);
             sleep(1000);
         }else{
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 38.0, -38.0,-38.0, 38.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 26.0, 26.0,28.0, 28.0, 3);
             sleep(1000);
             //encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
             //sleep(1000);
@@ -347,6 +347,13 @@ public class Power8648RedSideBlue extends LinearOpMode
 
             // reset the timeout time and start motion.
             runtime.reset();
+            /*
+            robot.leftFront.setVelocity(3000);
+            robot.leftFront.setVelocity(3000);
+            robot.leftFront.setVelocity(3000);
+            robot.leftFront.setVelocity(3000);
+             */
+
             robot.leftFront.setPower(Math.abs(speed));
             robot.leftBack.setPower(Math.abs(speed));
             robot.rightFront.setPower(Math.abs(speed));
@@ -361,7 +368,7 @@ public class Power8648RedSideBlue extends LinearOpMode
 
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftFront.isBusy() || robot.rightFront.isBusy() && robot.leftBack.isBusy() || robot.rightBack.isBusy())) {
+                    (robot.leftFront.isBusy() || robot.rightFront.isBusy() || robot.leftBack.isBusy() || robot.rightBack.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path1",  "Running to %7d :%7d :%7d :%7d", newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
@@ -375,11 +382,20 @@ public class Power8648RedSideBlue extends LinearOpMode
             }
 
             // Stop all motion;
+            /*
+            robot.leftFront.setVelocity(0);
+            robot.leftFront.setVelocity(0);
+            robot.leftFront.setVelocity(0);
+            robot.leftFront.setVelocity(0);
+
+             */
 
             robot.leftFront.setPower(0);
             robot.leftBack.setPower(0);
             robot.rightFront.setPower(0);
             robot.rightBack.setPower(0);
+
+
 
             // Turn off RUN_TO_POSITION
             robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

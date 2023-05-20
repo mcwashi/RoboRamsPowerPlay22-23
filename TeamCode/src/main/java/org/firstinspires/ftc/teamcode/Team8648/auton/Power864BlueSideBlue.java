@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ChassisTestHardwarePushbot;
+import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 public class Power864BlueSideBlue extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
-    ChassisTestHardwarePushbot robot = new ChassisTestHardwarePushbot();
+    Power8648HardwarePushbot robot = new Power8648HardwarePushbot(this);
     private ElapsedTime runtime = new ElapsedTime();
     OpenCvCamera camera;
     Power8648Pipeline power8648Pipeline;
@@ -200,29 +201,29 @@ public class Power864BlueSideBlue extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -44.0, 44.0,44.0, -44.0, 10);
+            encoderDrive(robot.TURN_SPEED, -36.0, 36.0,36.0, -36.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 44.0, 44.0,44.0, 44.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 36.0, 36.0,36.0, 36.0, 3);
             sleep(1000);
         }else if(tagOfInterest.id == MIDDLE){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -44.0, 44.0,44.0, -44.0, 10);
+            encoderDrive(robot.TURN_SPEED, 26.0, -26.0,-26.0, 26.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 44.0, -44.0,-44.0, 44.0, 10);
+            encoderDrive(robot.TURN_SPEED, -26.0, 26.0,26.0, -26.0, 3);
             sleep(1000);
         }else{
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 26.0, -26.0,-26.0, 26.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 44.0, 44.0,44.0, 44.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 44.0, 44.0,44.0, 44.0, 3);
             sleep(1000);
             //encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
             //sleep(1000);

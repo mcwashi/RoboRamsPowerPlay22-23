@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 
 
-@TeleOp(name="9788 RAMMY Teleop One-Controller", group="Pushbot")
+@TeleOp(name="9788 RAMMY Teleop One-Controller Mini", group="Pushbot")
 @Disabled
-public class Power9788TeleopOneController extends LinearOpMode {
-    Power8648HardwarePushbot robot           = new Power8648HardwarePushbot(this);
+public class Power9788TeleopOneControllerMini extends LinearOpMode {
+    Power9788HardwarePushbot robot           = new Power9788HardwarePushbot(this);
     Power8648HardwarePushbot.SlideTrainerState slideTrainerState = Power8648HardwarePushbot.SlideTrainerState.UNKNOWN;
     double slideError = 0.5;
     double pos;
@@ -22,7 +22,6 @@ public class Power9788TeleopOneController extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap, true);
         robot.rightLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         telemetry.addData("Say", "Hello Driver");
         telemetry.update();
 
@@ -69,19 +68,22 @@ public class Power9788TeleopOneController extends LinearOpMode {
             }
             if (gamepad1.dpad_up) {
                 //encoderLinear(1.0, 26.5, 26.5, 10);
-                robot.liftToTargetHeight(36.4,10);
+                robot.liftToTargetHeight(27.3,10);
 
             }
             if (gamepad1.dpad_right) {
-                robot.liftToTargetHeight(26.4,26.4);
+                robot.liftToTargetHeight(18.9,26.4);
 
                 //encoderLinear(1.0, 20.5, 20.5, 10);
 
             }
             if (gamepad1.dpad_left) {
-                robot.liftToTargetHeight(16,16);
+                robot.liftToTargetHeight(10.5,16);
                 //encoderLinear(1.0, 11.5, 11.5, 10);
 
+            }
+            if (gamepad1.left_bumper){
+                robot.liftToTargetHeight(0.9, 10);
             }
             if (gamepad1.dpad_down) {
 
@@ -91,7 +93,7 @@ public class Power9788TeleopOneController extends LinearOpMode {
 
             /*if(gamepad2.dpad_up)
                 robot.rightLinear.setTargetPosition(13);
-                robot.leftLinear.setTargetPosition(-13);
+                robot.leftLinear.setTargetPosition(-13);vvccv
 
              */
 
@@ -123,23 +125,22 @@ public class Power9788TeleopOneController extends LinearOpMode {
             }
 
              */
-            if(gamepad1.a) {
-                robot.leftClaw.setPosition(0.4);
-                robot.rightClaw.setPosition(0.3);}
+            if(gamepad1.right_bumper) {
+                robot.leftClaw.setPosition(0.0);
+                robot.rightClaw.setPosition(0.05);}
             else{
-                robot.leftClaw.setPosition(0.25);
+                robot.leftClaw.setPosition(0.08);
                 robot.rightClaw.setPosition(0.2);
                 }
+
+
 
             telemetry.addData("Right Claw Position", robot.rightClaw.getPosition());
             telemetry.addData("Left Claw Position", robot.leftClaw.getPosition());
             telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
-            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
-            telemetry.addData("Actual Left Position","%.1f", robot.getLeftSlidePos());
 
             telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-            telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
 
             telemetry.update();
         }
@@ -155,13 +156,10 @@ public class Power9788TeleopOneController extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
             newRightLinearTarget = robot.rightLinear.getCurrentPosition() + (int)(rightInches * robot.TICKS_PER_LIFT_IN);
-            newLeftLinearTarget = robot.leftLinear.getCurrentPosition() + (int)(leftInches * robot.TICKS_PER_LIFT_IN);
 
             //Sets the target position
-            robot.leftLinear.setTargetPosition(newLeftLinearTarget);
             robot.rightLinear.setTargetPosition(newRightLinearTarget);
             // Turn On RUN_TO_POSITION
-            robot.leftLinear.setPower(Math.abs(speed));
             robot.rightLinear.setPower(Math.abs(speed));
 
             //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -172,16 +170,13 @@ public class Power9788TeleopOneController extends LinearOpMode {
             //robot.leftLinear.setPower(Math.abs(speed));
             //robot.rightLinear.setPower(Math.abs(speed));
 
-            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
-            telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
             telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
             telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
 
             telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-            telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
 
             telemetry.update();
             // keep looping while we are still active, and there is time left, and both motors are running.
@@ -257,18 +252,16 @@ public class Power9788TeleopOneController extends LinearOpMode {
         }
     }
     public void resetLinear(){
-        robot.leftLinear.setTargetPosition(0);
         robot.rightLinear.setTargetPosition(0);
 
         while (opModeIsActive() &&
-                (robot.leftLinear.isBusy() && robot.rightLinear.isBusy())) {
+                ( robot.rightLinear.isBusy())) {
 
         }
 
         robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.leftLinear.setPower(0);
         robot.rightLinear.setPower(0);
 
     }

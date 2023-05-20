@@ -29,8 +29,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ChassisTestHardwarePushbot;
-import org.firstinspires.ftc.teamcode.Team8648.Power8648HardwarePushbot;
 import org.firstinspires.ftc.teamcode.Team9788.auton.Power9788Pipeline;
+import org.firstinspires.ftc.teamcode.Team9788.Power9788HardwarePushbot;
+
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -39,11 +40,12 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 @Autonomous
-//@Disabled
+@Disabled
 public class Power9788RedSideBlue extends LinearOpMode
 {
     //INTRODUCE VARIABLES HERE
-    Power8648HardwarePushbot robot = new Power8648HardwarePushbot(this);
+
+    Power9788HardwarePushbot robot = new Power9788HardwarePushbot(this);
     private ElapsedTime runtime = new ElapsedTime();
     OpenCvCamera camera;
     Power9788Pipeline power9788Pipeline;
@@ -202,30 +204,30 @@ public class Power9788RedSideBlue extends LinearOpMode
 
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -38.0, 38.0,38.0, -38.0, 10);
+            encoderDrive(robot.TURN_SPEED, -29.0, 29.0,29.0, -29.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 26.0, 26.0,28.0, 28.0, 3);
             sleep(1000);
 
         }else if(tagOfInterest.id == MIDDLE){
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 38.0, -38.0,-38.0, 38.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 90.0, 90.0,90.0, 90.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 54.0, 54.0,54.0, 54.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, -51.0, 51.0,51.0, -51.0, 10);
+            encoderDrive(robot.TURN_SPEED, -28.0, 28.0,28.0, -28.0, 3);
             sleep(1000);
         }else{
             //trajectory
-            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,4.0, 4.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 4.0, 4.0,6.0, 6.0, 3);
             sleep(1000);
-            encoderDrive(robot.TURN_SPEED, 56.0, -56.0,-56.0, 56.0, 10);
+            encoderDrive(robot.TURN_SPEED, 38.0, -38.0,-38.0, 38.0, 3);
             sleep(1000);
-            encoderDrive(robot.DRIVE_SPEED, 48.0, 48.0,48.0, 48.0, 10);
+            encoderDrive(robot.DRIVE_SPEED, 26.0, 26.0,28.0, 28.0, 3);
             sleep(1000);
             //encoderDrive(robot.TURN_SPEED, -48, 48, 48, -48, 10);
             //sleep(1000);
@@ -235,15 +237,13 @@ public class Power9788RedSideBlue extends LinearOpMode
 
     }
     public void resetLinear(){
-        robot.leftLinear.setTargetPosition(0);
         robot.rightLinear.setTargetPosition(0);
 
 
-        if((robot.getRightSlidePos() == 0) && (robot.getLeftSlidePos() == 0)){
+        if((robot.getRightSlidePos() == 0)){
             robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            robot.leftLinear.setPower(0);
             robot.rightLinear.setPower(0);
         }
         /*
@@ -266,13 +266,10 @@ public class Power9788RedSideBlue extends LinearOpMode
 
             // Determine new target position, and pass to motor controller
             newRightLinearTarget = robot.rightLinear.getCurrentPosition() + (int)(rightInches * robot.TICKS_PER_LIFT_IN);
-            newLeftLinearTarget = robot.leftLinear.getCurrentPosition() + (int)(leftInches * robot.TICKS_PER_LIFT_IN);
 
             //Sets the target position
-            robot.leftLinear.setTargetPosition(newLeftLinearTarget);
             robot.rightLinear.setTargetPosition(newRightLinearTarget);
             // Turn On RUN_TO_POSITION
-            robot.leftLinear.setPower(Math.abs(speed));
             robot.rightLinear.setPower(Math.abs(speed));
 
             //robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -283,7 +280,6 @@ public class Power9788RedSideBlue extends LinearOpMode
             //robot.leftLinear.setPower(Math.abs(speed));
             //robot.rightLinear.setPower(Math.abs(speed));
 
-            robot.leftLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightLinear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
@@ -295,16 +291,14 @@ public class Power9788RedSideBlue extends LinearOpMode
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (robot.leftLinear.isBusy() || robot.rightFront.isBusy())) {
+                    (robot.rightFront.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData(" Right Target Position", robot.rightLinearTargetHeight);
-                telemetry.addData("Left Target Position", robot.leftLinearTargetHeight);
                 telemetry.addData("Actual Right Position","%.1f", robot.getRightSlidePos());
                 telemetry.addData("Actual Left Position","%.1f", robot.getRightSlidePos());
 
                 telemetry.addData("Right Motor Power","%.1f", robot.rightLinear.getPower());
-                telemetry.addData("Left Motor Power","%.1f", robot.leftLinear.getPower());
 
                 telemetry.update();
             }

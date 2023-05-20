@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Team8648;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -9,13 +10,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Power8648HardwarePushbot {
 
-    public DcMotor leftFront = null;
-    public DcMotor rightFront = null;
-    public DcMotor leftBack = null;
-    public DcMotor rightBack = null;
+    public DcMotorEx leftFront = null;
+    public DcMotorEx rightFront = null;
+    public DcMotorEx leftBack = null;
+    public DcMotorEx rightBack = null;
 
-    public DcMotor leftLinear = null;
-    public DcMotor rightLinear = null;
+    public DcMotorEx leftLinear = null;
+    public DcMotorEx rightLinear = null;
 
     public Servo leftClaw = null;
     public Servo rightClaw = null;
@@ -31,8 +32,8 @@ public class Power8648HardwarePushbot {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     public static final double     COUNTS_PER_LINEAR_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (LINEAR_DIAMETER_INCHES * 3.1415);
-    public static final double     DRIVE_SPEED             = 0.3;
-    public static final double     TURN_SPEED              = 0.6;
+    public static final double     DRIVE_SPEED             = 0.4;
+    public static final double     TURN_SPEED              = 0.5;
     public static final double     LINEAR_SPEED              = 0.6;
 
     public  static double            SLIDELIFTSPEED                  = 1.0; //
@@ -50,10 +51,6 @@ public class Power8648HardwarePushbot {
 
     public double  leftLinearTargetHeight;
     public double  rightLinearTargetHeight;
-
-
-
-
 
 
     LinearOpMode opmode;
@@ -102,13 +99,13 @@ public class Power8648HardwarePushbot {
     }
     public void init(HardwareMap ahwMap, boolean inTeleOp){
         hwMap = ahwMap;
-        leftFront  = hwMap.get(DcMotor.class, "left_front");
-        rightFront = hwMap.get(DcMotor.class, "right_front");
-        leftBack  = hwMap.get(DcMotor.class, "left_back");
-        rightBack = hwMap.get(DcMotor.class, "right_back");
+        leftFront  = hwMap.get(DcMotorEx.class, "left_front");
+        rightFront = hwMap.get(DcMotorEx.class, "right_front");
+        leftBack  = hwMap.get(DcMotorEx.class, "left_back");
+        rightBack = hwMap.get(DcMotorEx.class, "right_back");
 
-        leftLinear  = hwMap.get(DcMotor.class, "left_linear");
-        rightLinear = hwMap.get(DcMotor.class, "right_linear");
+        leftLinear  = hwMap.get(DcMotorEx.class, "left_linear");
+        rightLinear = hwMap.get(DcMotorEx.class, "right_linear");
 
 
 
@@ -119,6 +116,17 @@ public class Power8648HardwarePushbot {
 
         leftLinear.setDirection(DcMotorSimple.Direction.REVERSE);
         rightLinear.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+        leftFront.setVelocityPIDFCoefficients(1.05, 0.105, 0, 10.5);
+        leftBack.setVelocityPIDFCoefficients(1.07, 0.107, 0, 10.7);
+        rightFront.setVelocityPIDFCoefficients(1.03, 0.103, 0, 10.3);
+        rightBack.setVelocityPIDFCoefficients(1.06, 0.106, 0, 10.6);
+
+        leftFront.setPositionPIDFCoefficients(5.0);
+        leftBack.setPositionPIDFCoefficients(5.0);
+        rightFront.setPositionPIDFCoefficients(5.0);
+        rightBack.setPositionPIDFCoefficients(5.0);
 
 
         leftBack.setPower(0);
